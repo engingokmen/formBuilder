@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+ <html>
+ <!-- •	Tanımlanmış form, data	 girişi yapılabilir şekilde sayfada görüntülenmelidir. -->
+  <body>
+    <div class="container text-center w-50 pb-4">
+      <h4 class="text-center my-4">FORM - {{formName}}</h4>
+
+      <form class="form-group" ng-controller="formCtrl" name="mform"  novalidate>
+        <label>{{firstName}}:</label>
+        <!-- •	dataType=STRING olan alanlar için text tipinde input, dataType=NUMBER olan alanlar için number tipinde input html elemanı kullanılmalıdır. -->
+        <input class="form-control form-control mb-4" type="{{selectedForm.fields[0].dataType}}" name="firstName" ng-model="userInput.firstName" required="{{selectedForm.fields[0].required}}"/>
+
+        <label>{{lastName}}:</label>
+        <input class="form-control form-control mb-4" type="{{selectedForm.fields[1].dataType}}" name="lastName" ng-model="userInput.lastName" required="{{selectedForm.fields[1].required}}"/>
+
+        <label>{{agee}}:</label>
+        <input class="form-control mb-4" type="{{selectedForm.fields[2].dataType}}" name="age" ng-model="userInput" required="{{selectedForm.fields[2].required}}"/>
+
+        <button class="btn btn-primary mt-4" type="submit">Gönder</button>
+      </form>
+      <a class="mb-4" ng-href="/">Anasayfaya dön</a>
+    </div>
+  </body>
+</html>

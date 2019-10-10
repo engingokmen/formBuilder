@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+ <html>
+  <head>
+    <meta charset="utf-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>DİNAMİK FORMLAR</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="app.js" ></script>
+  </head>
+ 	<body>
+    <div ng-app="formApp" ng-controller="mainCtrl">
+      <div class="container mt-3" ng-hide="homePage">
+        <div class="container text-center">
+          <h3>DİNAMİK FORM</h3>
+        </div>
+
+        <!-- •	Formun ismine göre arama yapılabilmelidir. -->
+        <form class="form-group text-right">
+          <input class="form-control input-sm w-25 mt-3" type="text" ng-model="filterForms" placeholder="Kayıtlı form arama">
+        </form>
+
+        <!-- •	İlk sayfa açılışında ekranda daha önce oluşturulmuş formların listesi tablo şeklinde listelenmelidir. -->
+        <h4 class="jumbotron-heading">Kayıtlı formlar</h4>
+        <table class="table table-striped mt-3">
+          <tr ng-repeat="x in values | orderBy:'name'| filter:filterForms">
+            <td>{{x["name"]}}</td>
+            <td>{{x["description"]}}</td>
+            <td>{{x["createdAt"]}}</td>
+            <td><a ng-href="/forms/{{x.name}}">Forma git</a></td>
+          </tr>
+        </table><br />
+
+        <!-- •	“Yeni Form Oluştur” butonuna basılarak, pop-up içerisinde kullanıcının dinamik form için gerekli olan bilgileri doldurması beklenir.  -->
+        <div class="container mt-3">
+          <!-- Button to Open the Modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" ng-click="createDate()">
+            Yeni form
+          </button>
+
+          <!-- The Modal -->
+          <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Yeni form</h4>
+                  <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                  <form class="form-group" name="dynamicForm" novalidate>
+
+                    <label>Form ismi:</label>
+                    <input class="form-control input-sm w-25" type="text" name="name" ng-model="forms.name" required/>
+                    <!-- Gerekli hata mesajları ekrana çıkartılmalıdır. -->
+                    <span style="color:red" ng-show="dynamicForm.name.$dirty && dynamicForm.name.$invalid">
+                    <span ng-show="dynamicForm.name.$error.required">Lütfen form adını giriniz.</span>
+                    </span><br />
+
+                    <label>Tanımı:</label>
+                    <input class="form-control input-sm w-25" type="text" name="description" ng-model="forms.description" required>
+                    <!-- Gerekli hata mesajları ekrana çıkartılmalıdır. -->
+                    <span style="color:red" ng-show="dynamicForm.description.$dirty && dynamicForm.description.$invalid">
+                    <span ng-show="dynamicForm.description.$error.required">Lütfen form açıklamasını giriniz.</span>
+                    </span><br />
+
+                    <label>Tarih:</label>
+                    <p class="form-control input-sm w-25">{{forms.createdAt}}</p>
+
+                    <h5 class="mt-4">Form alanı:</h5>
+
+                    <div class="form-inline">
+                      <label class="control-label col-sm-2">Alan ismi:</label><input class="form-control input-sm w-25 my-1" type="text" name="name1" ng-model="forms.fields[0].name" />
+                      <label class="control-label col-sm-2">Zorunlu alan:</label><input class="checkbox-inline my-1" type="checkbox" name="required1" ng-model="forms.fields[0].required" />
+                      <label class="control-label col-sm-2">Data tipi:</label><select class="form-control my-1" type="text" name="dataType1" ng-model="forms.fields[0].dataType" ng-options="v for v in dataTypes"></select>
+                    </div>
+
+                    <div class="form-inline">
+                      <label class="control-label col-sm-2">Alan ismi: </label><input class="form-control input-sm w-25 my-1" type="text" name="name2" ng-model="forms.fields[1].name">
+                      <label class="control-label col-sm-2">Zorunlu alan: </label><input class="checkbox-inline my-1" type="checkbox" name="required2" ng-model="forms.fields[1].required">
+                      <label class="control-label col-sm-2">Data tipi: </label><select class="form-control my-1" type="text" name="dataType2" ng-model="forms.fields[1].dataType" ng-options="y for y in dataTypes"></select>
+                    </div>
+                    <div class="form-inline">
+                      <label class="control-label col-sm-2">Alan ismi: </label><input class="form-control input-sm w-25 my-1" type="text" name="name3" ng-model="forms.fields[2].name">
+                      <label class="control-label col-sm-2">Zorunlu alan: </label><input class="checkbox-inline my-1" type="checkbox" name="required3" ng-model="forms.fields[2].required">
+                      <label class="control-label col-sm-2">Data tipi: </label><select class="form-control my-1" type="text" name="dataType3" ng-model="forms.fields[2].dataType" ng-options="z for z in dataTypes"></select>
+                    </div>
+
+                    <!-- createdAt -->
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <!-- Gerekli hata mesajları ekrana çıkartılmalıdır. -->
+                      <span ng-show="recordAlert">Formunuz kaydedilmiştir. </span>
+                      <!-- “Kaydet” butonu ile formun localstorage a kaydedilmesi sağlanmalıdır -->
+                      <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="dynamicForm.name.$dirty && dynamicForm.name.$invalid ||
+                      dynamicForm.description.$dirty && dynamicForm.description.$invalid">Kaydet</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="close()">Close</button>
+                    </div>
+                  </form>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end homepage -->
+      </div>
+
+      <div ng-view></div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  </body>
+ </html>
